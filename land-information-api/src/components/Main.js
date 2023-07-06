@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { FindByPnu } from "../NetworkUtils";
 const { kakao } = window;
 
 function Main() {
   const [map, setMap] = useState(null);
-  const [drawingManager, setDrawingManager] = useState(null);
 
   var mapTypes = {
     roadView: kakao.maps.MapTypeId.ROADVIEW,
@@ -28,82 +28,68 @@ function Main() {
       map.addOverlayMapTypeId(mapTypes.roadView);
     }
   }
-
   useEffect(() => {
+    let latlng;
     const container = document.getElementById("kakaoMaps");
-    const options = { center: new kakao.maps.LatLng(33.450701, 126.570667) };
+    const options = {
+      center: new kakao.maps.LatLng(37.58627147691941, 126.97291695278227),
+    };
     const kakaoMap = new kakao.maps.Map(container, options);
+
     setMap(kakaoMap);
 
-    const manager = new kakao.maps.drawing.DrawingManager({
-      map: kakaoMap,
-      drawingMode: [kakao.maps.drawing.OverlayType.POLYLINE],
-      polylineOptions: {
-        draggable: true,
-        removable: true,
-        editable: true,
-        strokeColor: "#39f",
-        strokeWeight: 3,
-      },
+    kakao.maps.event.addListener(kakaoMap, "click", function (mouseEvent) {
+      latlng = mouseEvent.latLng;
+
+      const geocoder = new kakao.maps.services.Geocoder();
+      geocoder.coord2Address(
+        latlng.getLng(),
+        latlng.getLat(),
+        function (result, status) {
+          if (status === kakao.maps.services.Status.OK) {
+            const address = result[0].address.address_name;
+            console.log("주소는 : " + address);
+            const encodedAddress = encodeURIComponent(address);
+            FindByPnu(
+              "GET",
+              `https://map.vworld.kr/search.do?category=jibun&q=${encodedAddress}&pageunit=10&output=json&pageindex=1&apiKey=4FB88625-7D2E-36D5-9AE9-F6401DF87374`
+            ).then((data) => {
+              console.log(data);
+            });
+          }
+        }
+      );
     });
-    setDrawingManager(manager);
   }, []);
 
   useEffect(() => {
-    if (drawingManager) {
-      const handleClick = (mouseEvent) => {
-        const latlng = mouseEvent.latLng;
-        const geocoder = new kakao.maps.services.Geocoder();
+    const polygon = new kakao.maps.Polygon({
+      map: map,
+      path: [
+        new kakao.maps.LatLng(37.58627147691941, 126.97291695278227),
+        new kakao.maps.LatLng(37.586157217822496, 126.97319465456775),
+        new kakao.maps.LatLng(37.58607386650917, 126.97311492351132),
+        new kakao.maps.LatLng(37.58603000840896, 126.97301058647821),
+        new kakao.maps.LatLng(37.58601453238504, 126.97298533328807),
+        new kakao.maps.LatLng(37.5859909222094, 126.97296732921032),
+        new kakao.maps.LatLng(37.58602020289903, 126.97296178163238),
+        new kakao.maps.LatLng(37.58609628733498, 126.97294609440449),
+        new kakao.maps.LatLng(37.58611291869937, 126.97294266883853),
+        new kakao.maps.LatLng(37.58621086899864, 126.97292263692108),
+        new kakao.maps.LatLng(37.586252376172965, 126.97291756015134),
+      ],
+      fillColor: "rgba(255, 0, 0, 0.5)",
+      strokeWeight: 3,
+      strokeColor: "rgba(255, 0, 0, 0.8)",
+    });
 
-        geocoder.coord2Address(
-          latlng.getLng(),
-          latlng.getLat(),
-          (result, status) => {
-            if (status === kakao.maps.services.Status.OK) {
-              if (result[0]) {
-                const address = result[0].address.address_name;
-                console.log(address); //선택한 위치에 대한 주소가 나옴
-                console.log(latlng); // 위도 경도
-              }
-            }
-          }
-        );
-      };
-      kakao.maps.event.addListener(map, "click", handleClick);
-    }
-  }, [drawingManager, map]);
-
-  useEffect(() => {
-    if (drawingManager) {
-      kakao.maps.event.addListener(
-        drawingManager,
-        "polygoncomplete",
-        (polygon) => {
-          const path = polygon.getPath();
-
-          const selectedArea = new window.kakao.maps.Polygon({
-            path: path,
-            fillColor: "rgba(255, 0, 0, 0.5)",
-            strokeWeight: 3,
-            strokeColor: "rgba(255, 0, 0, 0.8)",
-            map: map,
-          });
-
-          polygon.setOptions({
-            fillColor: "rgba(0, 255, 0, 0.5)",
-            strokeColor: "rgba(0, 255, 0, 0.8)",
-          });
-
-          kakao.maps.event.addListener(selectedArea, "click", function () {
-            selectedArea.setOptions({
-              fillColor: "rgba(255, 0, 0, 0.5)",
-              strokeColor: "rgba(255, 0, 0, 0.8)",
-            });
-          });
-        }
-      );
-    }
-  }, [drawingManager, map]);
+    kakao.maps.event.addListener(polygon, "click", function () {
+      polygon.setOptions({
+        fillColor: "rgba(255, 0, 0, 0.5)",
+        strokeColor: "rgba(255, 0, 0, 0.8)",
+      });
+    });
+  }, [map]);
 
   return (
     <div>
