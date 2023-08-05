@@ -1,4 +1,4 @@
-package kr.co.tj.test;
+package kr.co.tj.main;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

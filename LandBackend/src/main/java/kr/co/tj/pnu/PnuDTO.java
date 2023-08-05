@@ -1,4 +1,4 @@
-package kr.co.tj.test;
+package kr.co.tj.pnu;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TestDTO {
-	private String category;
+public class PnuDTO {
+	private String pnu;
+	
 	private String address;
-	private String apiKey;
 }

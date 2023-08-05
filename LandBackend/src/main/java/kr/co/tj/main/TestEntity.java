@@ -1,4 +1,4 @@
-package kr.co.tj.test;
+package kr.co.tj.main;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -29,7 +29,4 @@ public class TestEntity {
 	
 	@Column(nullable = false)
 	private String address;
-	
-	@Column(nullable = false)
-	private String apiKey;
 }
