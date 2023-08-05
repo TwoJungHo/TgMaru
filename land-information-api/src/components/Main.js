@@ -94,7 +94,7 @@ function Main() {
   return (
     <div>
       <h2>Text</h2>
-      <div id="kakaoMaps" style={{ width: "100%", height: "800px" }}></div>
+      <div id="kakaoMaps" style={{ width: "1200px", height: "800px" }}></div>
       <input
         type="checkbox"
         id="chkUseDistrict"
