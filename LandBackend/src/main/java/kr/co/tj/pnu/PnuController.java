@@ -27,8 +27,7 @@ public class PnuController {
 		
 		PnuDTO dto = pnuservice.findByAdd(res.getAddress());
 		if(dto!=null) {
-			System.out.println("첫번쨰 if돌음");
-			System.out.println(dto.getPnu());
+			pnuservice.findByPnu(dto);
 			return ResponseEntity.ok(dto);
 		}
 		
