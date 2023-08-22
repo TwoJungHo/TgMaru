@@ -1,4 +1,4 @@
-export function FindByPnu(method, url, dto) {
+export function FindByPolygon(method, url, dto) {
   let options = {
     method: method,
     headers: {
@@ -8,7 +8,6 @@ export function FindByPnu(method, url, dto) {
   };
   return fetch(url, options)
     .then((response) => {
-      console.log(response);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

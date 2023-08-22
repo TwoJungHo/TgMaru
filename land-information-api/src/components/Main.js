@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { FindByPnu } from "../NetworkUtils";
+import React, { useEffect, useState, useRef } from "react";
+import { FindByPolygon } from "../NetworkUtils";
 const { kakao } = window;
 
 function Main() {
   const [map, setMap] = useState(null);
+  const [netPolygon, setNetPolygon] = useState();
+  const [juso,setJuso] = useState();
+
+  const previousPolygonRef = useRef(null); // useRef로 변수 생성
 
   var mapTypes = {
     roadView: kakao.maps.MapTypeId.ROADVIEW,
@@ -28,6 +32,7 @@ function Main() {
       map.addOverlayMapTypeId(mapTypes.roadView);
     }
   }
+
   useEffect(() => {
     let latlng;
     const container = document.getElementById("kakaoMaps");
@@ -36,77 +41,87 @@ function Main() {
     };
     const kakaoMap = new kakao.maps.Map(container, options);
 
+    // 지도 타입 변경 컨트롤을 생성한다
+    const mapTypeControl = new kakao.maps.MapTypeControl();
+
+    // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+    kakaoMap.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+
     setMap(kakaoMap);
 
     kakao.maps.event.addListener(kakaoMap, "click", function (mouseEvent) {
       latlng = mouseEvent.latLng;
 
       const geocoder = new kakao.maps.services.Geocoder();
-      geocoder.coord2Address(
-        latlng.getLng(),
-        latlng.getLat(),
-        function (result, status) {
-          if (status === kakao.maps.services.Status.OK) {
-            const address = result[0].address.address_name;
-            console.log("주소는 : " + address);
-            const dto = {
-              category : "jibun",
-              address : address
-            }
-            FindByPnu(
-              "POST",
-              `http://localhost:8000/pnu/findpnu`,
-              dto
-            ).then((data) => {
-              console.log(data);
-            });
-          }
+      geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          const address = result[0].address.address_name;
+          setJuso(address);
+          const dto = {
+            category: "jibun",
+            address: address,
+          };
+          FindByPolygon("POST", `http://localhost:8000/pnu/findpnu`, dto).then((data) => {
+            setNetPolygon(data);
+          });
         }
-      );
+      });
     });
   }, []);
 
   useEffect(() => {
-    const polygon = new kakao.maps.Polygon({
+    if (!map || !netPolygon) {
+      return;
+    }
+
+    if (previousPolygonRef.current) {
+      previousPolygonRef.current.setMap(null); // 이전 다각형을 지도에서 제거
+    }
+
+    const polygonCoords = netPolygon.map(coord => new kakao.maps.LatLng(coord[1], coord[0]));
+    const newPolygon = new kakao.maps.Polygon({
       map: map,
-      path: [
-        new kakao.maps.LatLng(37.58627147691941, 126.97291695278227),
-        new kakao.maps.LatLng(37.586157217822496, 126.97319465456775),
-        new kakao.maps.LatLng(37.58607386650917, 126.97311492351132),
-        new kakao.maps.LatLng(37.58603000840896, 126.97301058647821),
-        new kakao.maps.LatLng(37.58601453238504, 126.97298533328807),
-        new kakao.maps.LatLng(37.5859909222094, 126.97296732921032),
-        new kakao.maps.LatLng(37.58602020289903, 126.97296178163238),
-        new kakao.maps.LatLng(37.58609628733498, 126.97294609440449),
-        new kakao.maps.LatLng(37.58611291869937, 126.97294266883853),
-        new kakao.maps.LatLng(37.58621086899864, 126.97292263692108),
-        new kakao.maps.LatLng(37.586252376172965, 126.97291756015134),
-      ],
+      path: polygonCoords,
       fillColor: "rgba(255, 0, 0, 0.5)",
       strokeWeight: 3,
       strokeColor: "rgba(255, 0, 0, 0.8)",
     });
 
-    kakao.maps.event.addListener(polygon, "click", function () {
-      polygon.setOptions({
+    previousPolygonRef.current = newPolygon; // previousPolygon 업데이트
+
+    kakao.maps.event.addListener(newPolygon, "click", function () {
+      newPolygon.setOptions({
         fillColor: "rgba(255, 0, 0, 0.5)",
         strokeColor: "rgba(255, 0, 0, 0.8)",
       });
     });
-  }, [map]);
+
+  }, [map, netPolygon]);
 
   return (
-    <div>
-      <h2>Text</h2>
-      <div id="kakaoMaps" style={{ width: "1200px", height: "800px" }}></div>
-      <input
-        type="checkbox"
-        id="chkUseDistrict"
-        onClick={setOverlayMapTypeId}
-      />
-      지적편집도
-      <input type="checkbox" id="chkroadView" onClick={setOverlayMapTypeId} />
-      로드뷰
+    <div style={{backgroundColor:"whitesmoke", height:"875px"}}>
+    <div style={{display:"flex",justifyContent:"center",height:"auto"}}>
+      <div style={{display:"inline-table", width:"300px"}}>
+      <h2>선택한 주소</h2>
+      <p>{juso}</p>
+      <h1>4/1만 차지하게</h1>
+      <h1>4/1만 차지하게</h1>
+      
+      </div>
+        
+      <div id="kakaoMapsContainer" style={{ position: "relative", width: "70%", height: "800px" }}>
+        <div id="kakaoMaps" style={{ width: "100%", height: "100%" }}></div>
+        {/* 버튼 컨테이너 */}
+        <div style={{ position: "absolute", top: "40px", right: "10px", zIndex: 100 }}>
+          {/* zIndex 값을 높게 설정하여 다른 요소 위에 올라오도록 함 */}
+          <input type="checkbox" id="chkUseDistrict" onClick={setOverlayMapTypeId} />
+          지적편집도<br/>
+          <input type="checkbox" id="chkroadView" onClick={setOverlayMapTypeId} />
+          로드뷰
+        </div>
+      </div>
+      </div>
     </div>
   );
 }
