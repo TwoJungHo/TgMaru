@@ -49,10 +49,14 @@ function Main() {
           if (status === kakao.maps.services.Status.OK) {
             const address = result[0].address.address_name;
             console.log("주소는 : " + address);
-            const encodedAddress = encodeURIComponent(address);
+            const dto = {
+              category : "jibun",
+              address : address
+            }
             FindByPnu(
-              "GET",
-              `https://map.vworld.kr/search.do?category=jibun&q=${encodedAddress}&pageunit=10&output=json&pageindex=1&apiKey=4FB88625-7D2E-36D5-9AE9-F6401DF87374`
+              "POST",
+              `http://localhost:8000/pnu/findpnu`,
+              dto
             ).then((data) => {
               console.log(data);
             });

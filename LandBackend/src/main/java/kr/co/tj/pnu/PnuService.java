@@ -52,6 +52,7 @@ public class PnuService {
 		return dto;
 	}
 
+	// DB에 해당 주소가 있는지 확인
 	public PnuDTO findByAdd(String address) {
 		PnuEntity entity= pnuRepository.findByAddress(address);
 		if(entity==null) {
@@ -64,7 +65,7 @@ public class PnuService {
 		return dto;
 	}
 
-	public void findByPnu(PnuDTO dto) throws IOException {
+	public List<Double> findByPnu(PnuDTO dto) throws IOException {
 		StringBuilder urlBuilder = new StringBuilder("http://api.vworld.kr/req/data");
         urlBuilder.append("?key=84DF8EE3-31FB-3E67-B49C-4A8870DE3D48");
         urlBuilder.append("&service=data");
@@ -113,8 +114,7 @@ public class PnuService {
         // 멀티폴리곤 값을 리스트로 변환
         List<Double> multiPolygon = objectMapper.convertValue(multiPolygonNode, List.class);
 
-        // 멀티폴리곤 출력
-        System.out.println(multiPolygon);
+        return multiPolygon;
 	}
 
 }

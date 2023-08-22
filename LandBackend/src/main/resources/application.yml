@@ -1,0 +1,20 @@
+server:
+  port: 8000 
+
+spring:
+  application:
+    name: landback
+    
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/landback?serverTimezone=Asia/Seoul
+    username: tj705
+    password: tj705

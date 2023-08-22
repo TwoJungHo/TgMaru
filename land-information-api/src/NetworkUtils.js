@@ -1,15 +1,11 @@
-export function FindByPnu(method, url) {
+export function FindByPnu(method, url, dto) {
   let options = {
     method: method,
-    credentials: "include",
     headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Credentials": true,
-      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json"
     },
+    body: JSON.stringify(dto)
   };
-  console.log(url);
-  console.log(options);
   return fetch(url, options)
     .then((response) => {
       console.log(response);
@@ -19,8 +15,6 @@ export function FindByPnu(method, url) {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
-      // 요청에 대한 처리 코드 작성
       return data;
     })
     .catch((error) => {
