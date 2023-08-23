@@ -102,17 +102,17 @@ function Main() {
     <div>
       <div style={{ display: "flex", justifyContent: "center"}}>
         {/* 왼쪽에 배치될 요소 */}
-        <div style={{ display: "inline-block", width: "500px", padding: "10px", backgroundColor: "black"}}>
+        <div style={{ display: "inline-block", width: "500px", padding: "10px", backgroundColor: "black", height:"915px"}}>
           <h2 style={{textAlign:"center"}}><Badge bg="dark">선택한 주소</Badge></h2>
           <Button style={{margin:"auto", display:"block"}} variant="outline-success">{juso !== null ? juso : '주소'}</Button><br/>
           <Button style={{margin:"auto", display:"block"}} variant="outline-primary">{juso !== null ? '자세히보기' : '지도 클릭시 활성화'}</Button>
           <br/><br/><br/>
           <h2 style={{color:"white", textAlign:"center"}}>최근 본 목록</h2><br/>
-          <p style={{fontSize:"20px", color:"white", textAlign:"center"}}>4/1만 차지하게</p>
+          <p style={{fontSize:"20px", color:"white", textAlign:"center"}}>로그인시 활성화됩니다.</p>
         </div>
 
         <div style={{ position: "relative", width: "100%", height: "800px" }}>
-          <div id="kakaoMaps" style={{ width: "100%", height: "100%" }}></div>
+          <div id="kakaoMaps" style={{ width: "100%", height: "915px" }}></div>
           {/* 버튼 컨테이너 */}
           <div style={{ position: "absolute", top: "10px", zIndex: 100 }}>
           <label className="checkbox-container" htmlFor="chkUseDistrict">
