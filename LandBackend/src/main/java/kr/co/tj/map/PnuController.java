@@ -1,4 +1,4 @@
-package kr.co.tj.pnu;
+package kr.co.tj.map;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/pnu")
+@RequestMapping("/mapinfo")
 @AllArgsConstructor
 public class PnuController {
 	

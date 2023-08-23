@@ -1,4 +1,4 @@
-package kr.co.tj.pnu;
+package kr.co.tj.map;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +25,6 @@ public class PnuService {
 	// Pnu찾기
 	public StringBuilder HttpPnuResponse(HttpResponse res) throws IOException {
 		// 외부 api에 요청보낼 준비작업
-		System.out.println(res);
 		StringBuilder urlBuilder = new StringBuilder("http://map.vworld.kr/search.do");
 		urlBuilder.append("?apiKey=4FB88625-7D2E-36D5-9AE9-F6401DF87374");
 		urlBuilder.append("&q=" + URLEncoder.encode(res.getAddress(), "UTF-8"));
@@ -55,36 +54,37 @@ public class PnuService {
 	}
 
 	// 찾은 pnu값이 String형으로 되어있어서 dto로 변환작업
-	public PnuDTO parseApiResponse(String reponse) {
+	public PnuDTO parseApiResponse(String response) {
+	    PnuDTO dto = new PnuDTO();
 
-		PnuDTO dto = new PnuDTO();
+	    try {
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        JsonNode rootNode = objectMapper.readTree(response);
+	        JsonNode listNode = rootNode.get("LIST");
 
-		try {
-			// JSON 파싱을 위해 ObjectMapper 사용
-			ObjectMapper objectMapper = new ObjectMapper();
-			JsonNode rootNode = objectMapper.readTree(reponse);
-			JsonNode listNode = rootNode.get("LIST");
+	        // LIST 배열에서 첫 번째 객체를 가져옴
+	        JsonNode firstItemNode = listNode.get(0);
+	        
+	        // "PNU"와 "JUSO" 값을 추출
+	        String PNU = firstItemNode.get("PNU").asText();
+	        String JUSO = firstItemNode.get("JUSO").asText();
 
-			for (JsonNode itemNode : listNode) {
-				// API 응답 결과로 파싱할 필드들을 가져와서 TestDTO 객체로 생성
-				String PNU = itemNode.get("PNU").asText();
-				String JUSO = itemNode.get("JUSO").asText();
+	        dto.setPnu(PNU);
+	        dto.setAddress(JUSO);
 
-				dto.setPnu(PNU);
-				dto.setAddress(JUSO);
+	        Optional<PnuEntity> optional = pnuRepository.findById(PNU);
 
-				Optional<PnuEntity> optional = pnuRepository.findById(PNU);
-
-				if (!optional.isPresent()) {
-					PnuEntity entity = PnuEntity.builder().pnu(dto.getPnu()).address(dto.getAddress()).build();
-					pnuRepository.save(entity);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return dto;
+	        if (!optional.isPresent()) {
+	            PnuEntity entity = PnuEntity.builder().pnu(dto.getPnu()).address(dto.getAddress()).build();
+	            pnuRepository.save(entity);
+	        }
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return dto;
 	}
+
 
 	// pnu값으로 multipolygon찾기
 	public List<Double> findByMultiPolygon(PnuDTO dto) throws IOException {
@@ -127,7 +127,7 @@ public class PnuService {
 
 		// 멀티폴리곤 값을 리스트로 변환
 		List<Double> multiPolygon = objectMapper.convertValue(multiPolygonNode, List.class);
-
+		
 		return multiPolygon;
 	}
 

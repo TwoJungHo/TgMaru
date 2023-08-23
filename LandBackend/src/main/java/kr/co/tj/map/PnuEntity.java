@@ -1,4 +1,6 @@
-package kr.co.tj.pnu;
+package kr.co.tj.map;
+
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,4 +23,5 @@ public class PnuEntity {
 	
 	@Column(nullable = false)
 	private String address;
+	
 }

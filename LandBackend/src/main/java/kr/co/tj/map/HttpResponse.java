@@ -1,4 +1,4 @@
-package kr.co.tj.pnu;
+package kr.co.tj.map;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package kr.co.tj.pnu;
+package kr.co.tj.map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
