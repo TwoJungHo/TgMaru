@@ -1,11 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { FindByPolygon } from "../NetworkUtils";
+import Button from 'react-bootstrap/Button';
+import Badge from 'react-bootstrap/Badge';
+
 const { kakao } = window;
 
 function Main() {
   const [map, setMap] = useState(null);
   const [netPolygon, setNetPolygon] = useState();
-  const [juso,setJuso] = useState();
+  const [juso,setJuso] = useState(null);
+  const [isChecked, setIsChecked] = useState(false);
 
   const previousPolygonRef = useRef(null); // useRef로 변수 생성
 
@@ -15,9 +19,8 @@ function Main() {
   };
 
   function setOverlayMapTypeId() {
-    var roadView = document.getElementById("chkroadView"),
-      chkUseDistrict = document.getElementById("chkUseDistrict");
-
+     var chkUseDistrict = document.getElementById("chkUseDistrict");
+     setIsChecked(chkUseDistrict.checked);
     // 기본지도
     for (var type in mapTypes) {
       map.removeOverlayMapTypeId(mapTypes[type]);
@@ -27,10 +30,6 @@ function Main() {
       map.addOverlayMapTypeId(mapTypes.useDistrict);
     }
 
-    // 로드뷰
-    if (roadView.checked) {
-      map.addOverlayMapTypeId(mapTypes.roadView);
-    }
   }
 
   useEffect(() => {
@@ -62,7 +61,7 @@ function Main() {
             category: "jibun",
             address: address,
           };
-          FindByPolygon("POST", `http://localhost:8000/pnu/findpnu`, dto).then((data) => {
+          FindByPolygon("POST", `http://localhost:8000/mapinfo/findpnu`, dto).then((data) => {
             setNetPolygon(data);
           });
         }
@@ -100,28 +99,34 @@ function Main() {
   }, [map, netPolygon]);
 
   return (
-    <div style={{ backgroundColor: "whitesmoke"}}>
+    <div>
       <div style={{ display: "flex", justifyContent: "center"}}>
         {/* 왼쪽에 배치될 요소 */}
-        <div style={{ display: "inline-block", width: "400px", padding: "10px", backgroundColor: "gray", boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)" }}>
-          <h2>선택한 주소</h2>
-          <p>{juso}</p>
-          <h1>4/1만 차지하게</h1>
-          <h1>4/1만 차지하게</h1>
+        <div style={{ display: "inline-block", width: "500px", padding: "10px", backgroundColor: "black"}}>
+          <h2 style={{textAlign:"center"}}><Badge bg="dark">선택한 주소</Badge></h2>
+          <Button style={{margin:"auto", display:"block"}} variant="outline-success">{juso !== null ? juso : '주소'}</Button><br/>
+          <Button style={{margin:"auto", display:"block"}} variant="outline-primary">{juso !== null ? '자세히보기' : '지도 클릭시 활성화'}</Button>
+          <br/><br/><br/>
+          <h2 style={{color:"white", textAlign:"center"}}>최근 본 목록</h2><br/>
+          <p style={{fontSize:"20px", color:"white", textAlign:"center"}}>4/1만 차지하게</p>
         </div>
 
         <div style={{ position: "relative", width: "100%", height: "800px" }}>
           <div id="kakaoMaps" style={{ width: "100%", height: "100%" }}></div>
           {/* 버튼 컨테이너 */}
-          <div style={{ position: "absolute", top: "40px", right: "10px", zIndex: 100 }}>
-            <input type="checkbox" id="chkUseDistrict" onClick={setOverlayMapTypeId} />
-            지적편집도<br />
-            <input type="checkbox" id="chkroadView" onClick={setOverlayMapTypeId} />
-            로드뷰
+          <div style={{ position: "absolute", top: "10px", zIndex: 100 }}>
+          <label className="checkbox-container" htmlFor="chkUseDistrict">
+        <input className="checkmark" type="checkbox" id="chkUseDistrict" onClick={setOverlayMapTypeId} />
+        <p style={{fontSize:"20px"}}>
+        <Badge bg="dark">{isChecked ? '지적편집도 비활성화' : '지적편집도 활성화'}</Badge>
+        </p>
+      </label>
           </div>
         </div>
       </div>
+      <p style={{textAlign:"center", backgroundColor:"black", color:"white"}}>본 지도의 표시되는 지적은 사실과 다를 수 있습니다</p>  
     </div>
+    
   );
 }
 
