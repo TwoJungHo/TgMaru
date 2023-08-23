@@ -1,3 +1,15 @@
+@font-face {
+  font-family: "SUITE-Regular";
+  src: url(/public/fonts/SUITE-Regular.ttf);
+}
+
+* {
+  font-family: "SUITE-Regular";
+  font-size: large;
+  margin: 0;
+  padding: 0
+}
+
 .App {
   text-align: center;
 }

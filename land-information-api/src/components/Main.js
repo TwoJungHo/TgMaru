@@ -100,27 +100,26 @@ function Main() {
   }, [map, netPolygon]);
 
   return (
-    <div style={{backgroundColor:"whitesmoke", height:"875px"}}>
-    <div style={{display:"flex",justifyContent:"center",height:"auto"}}>
-      <div style={{display:"inline-table", width:"300px"}}>
-      <h2>선택한 주소</h2>
-      <p>{juso}</p>
-      <h1>4/1만 차지하게</h1>
-      <h1>4/1만 차지하게</h1>
-      
-      </div>
-        
-      <div id="kakaoMapsContainer" style={{ position: "relative", width: "70%", height: "800px" }}>
-        <div id="kakaoMaps" style={{ width: "100%", height: "100%" }}></div>
-        {/* 버튼 컨테이너 */}
-        <div style={{ position: "absolute", top: "40px", right: "10px", zIndex: 100 }}>
-          {/* zIndex 값을 높게 설정하여 다른 요소 위에 올라오도록 함 */}
-          <input type="checkbox" id="chkUseDistrict" onClick={setOverlayMapTypeId} />
-          지적편집도<br/>
-          <input type="checkbox" id="chkroadView" onClick={setOverlayMapTypeId} />
-          로드뷰
+    <div style={{ backgroundColor: "whitesmoke"}}>
+      <div style={{ display: "flex", justifyContent: "center"}}>
+        {/* 왼쪽에 배치될 요소 */}
+        <div style={{ display: "inline-block", width: "400px", padding: "10px", backgroundColor: "gray", boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)" }}>
+          <h2>선택한 주소</h2>
+          <p>{juso}</p>
+          <h1>4/1만 차지하게</h1>
+          <h1>4/1만 차지하게</h1>
         </div>
-      </div>
+
+        <div style={{ position: "relative", width: "100%", height: "800px" }}>
+          <div id="kakaoMaps" style={{ width: "100%", height: "100%" }}></div>
+          {/* 버튼 컨테이너 */}
+          <div style={{ position: "absolute", top: "40px", right: "10px", zIndex: 100 }}>
+            <input type="checkbox" id="chkUseDistrict" onClick={setOverlayMapTypeId} />
+            지적편집도<br />
+            <input type="checkbox" id="chkroadView" onClick={setOverlayMapTypeId} />
+            로드뷰
+          </div>
+        </div>
       </div>
     </div>
   );
