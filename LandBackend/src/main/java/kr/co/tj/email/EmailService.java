@@ -1,44 +1,52 @@
 package kr.co.tj.email;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.sendgrid.Method;
-import com.sendgrid.Request;
-import com.sendgrid.Response;
-import com.sendgrid.SendGrid;
-import com.sendgrid.helpers.mail.Mail;
-import com.sendgrid.helpers.mail.objects.Content;
-import com.sendgrid.helpers.mail.objects.Email;
+import java.util.Random;
 
-import lombok.AllArgsConstructor;
-
+@Component
 @Service
-@AllArgsConstructor
 public class EmailService {
-	private SendGrid sendGrid;
-	
-	public void sendEmail(String to, String subject, String text) throws Exception{
-		Email from = new Email("www.naver.com"); // 보내는 사람 이메일 주소
-		Email toEmail = new Email(to);
-		Content content = new Content("text/plain", text);
-		Mail mail = new Mail(from, subject, toEmail, content);
-		
-		Request request = new Request();
-		
-		try {
-			request.setMethod(Method.POST);
-			request.setEndpoint("mail/send");
-			request.setBody(mail.build());
-			
-			Response response = sendGrid.api(request);
-			
-			if(response.getStatusCode() >=200 && response.getStatusCode() < 300) {
-				System.out.println("이메일이 성공적으로 전송되었습니다.");
-			} else {
-				throw new Exception("이메일 전송에 실패하였습니다" + response.getBody());
-			}
-		} catch (Exception e) {
-			throw new Exception(e);
-		}
-	}
+
+    private final JavaMailSender javaMailSender;
+    private int authNumber;
+
+    @Autowired
+    public EmailService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
+
+    public void makeRandomNumber() {
+        Random random = new Random();
+        int checkNum = random.nextInt(888888) + 111111;
+        System.out.println("인증번호 : " + checkNum);
+        authNumber = checkNum;
+    }
+
+    public String sendEmail(String email) {
+        makeRandomNumber();
+
+        String setFrom = "qwer4667@naver.com";
+        String toMail = email;
+        String title = "인증 이메일";
+        String content = "홈페이지를 방문해 주셔서 감사합니다." + "<br>" +
+                "인증번호는 " + authNumber + "입니다.";
+
+        mailSend(setFrom, toMail, title, content);
+
+        return Integer.toString(authNumber);
+    }
+
+    public void mailSend(String setFrom, String toMail, String title, String content) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(setFrom);
+        message.setTo(toMail);
+        message.setSubject(title);
+        message.setText(content);
+        javaMailSender.send(message);
+    }
 }

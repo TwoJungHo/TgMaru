@@ -4,6 +4,18 @@ server:
 spring:
   application:
     name: landback
+  
+  mail:
+    host: smtp.naver.com
+    port: 587
+    username: qwer4667@naver.com
+    password: hh890807^^
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
     
   jpa:
     hibernate:
