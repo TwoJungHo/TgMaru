@@ -100,6 +100,7 @@ function Main() {
 
   return (
     <div>
+      <header className="Main-header">
       <div style={{ display: "flex", justifyContent: "center"}}>
         {/* 왼쪽에 배치될 요소 */}
         <div style={{ display: "inline-block", width: "500px", padding: "10px", backgroundColor: "black", height:"915px"}}>
@@ -125,6 +126,7 @@ function Main() {
         </div>
       </div>
       <p style={{textAlign:"center", backgroundColor:"black", color:"white"}}>본 지도의 표시되는 지적은 사실과 다를 수 있습니다</p>  
+      </header>
     </div>
     
   );

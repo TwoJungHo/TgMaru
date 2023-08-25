@@ -3,6 +3,8 @@ import "./App.css";
 import Main from "./components/Main";
 import Navbars from "./Navbars";
 import 'bootstrap/dist/css/bootstrap.css'
+import Login from "./components/member/Login";
+import Signup from "./components/member/Signup";
 function App() {
   return (
     <div>
@@ -10,6 +12,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" Component={Main} />
+          <Route path="/login" Component={Login}/>
+          <Route path="/Signup" Component={Signup}/>
         </Routes>
       </BrowserRouter>
     </div>
