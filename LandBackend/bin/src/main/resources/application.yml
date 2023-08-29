@@ -4,9 +4,6 @@ server:
 spring:
   application:
     name: landback
-  security:
-    user:
-      password: 
   
   mail:
     host: smtp.naver.com

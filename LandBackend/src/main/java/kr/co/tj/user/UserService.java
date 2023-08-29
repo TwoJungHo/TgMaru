@@ -1,5 +1,6 @@
 package kr.co.tj.user;
 
+
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -19,5 +20,23 @@ public class UserService {
 		}
 		return true;
 	}
+
+	public UserEntity UserSignUp(UserDTO dto) {
+	    UserEntity entity = userRepository.findByEmail(dto.getEmail());
+
+	    if (entity == null) {
+	        entity = UserEntity.builder()
+	            .userId(dto.getUserId())
+	            .username(dto.getUsername())
+	            .password(dto.getPassword())
+	            .email(dto.getEmail())
+	            .build();
+
+	        entity = userRepository.save(entity);
+	        return entity;
+	    }
+	    return null;
+	}
+
 
 }
