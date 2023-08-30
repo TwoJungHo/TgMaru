@@ -8,6 +8,7 @@ export function FindByPolygon(method, url, dto) {
   };
   return fetch(url, options)
     .then((response) => {
+      console.log(response.status)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
