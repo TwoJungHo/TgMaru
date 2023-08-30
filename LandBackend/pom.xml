@@ -10,11 +10,12 @@
 	</parent>
 	<groupId>kr.co.tj</groupId>
 	<artifactId>landinformation</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
+	<!--<version>0.0.1-SNAPSHOT</version>-->
 	<name>landinformation</name>
 	<description>landinformation project</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		
