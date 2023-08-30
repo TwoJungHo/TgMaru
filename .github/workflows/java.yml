@@ -1,4 +1,4 @@
-name: Board-service Java ci/cd with Maven
+name: landinformation Java ci/cd with Maven
 
 on:
   push:
