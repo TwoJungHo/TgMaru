@@ -84,9 +84,9 @@
 # 📷 Screenshots
 
 
-**메인 화면**
+**메인 화면(지도클릭)**
 
-![image](https://github.com/TwoJungHo/LandInformationAPI/assets/132986801/0178d62d-323b-47d4-9bf3-23aff2088fb4)
+![image](https://github.com/TwoJungHo/LandInformationAPI/assets/132986801/17b2c029-41fb-4dd9-b461-a971d24192a6)
 
 
 **로그인화면**
