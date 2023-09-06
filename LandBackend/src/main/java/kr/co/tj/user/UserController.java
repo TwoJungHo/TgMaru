@@ -24,6 +24,10 @@ public class UserController {
 		
 		UserEntity entity = userService.UserSignUp(dto);
 		
+		if(entity == null) {
+			return ResponseEntity.badRequest().body("이미 있는 유저");
+		}
+		
 		return ResponseEntity.ok().body(entity);
 	}
 }

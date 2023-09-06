@@ -33,7 +33,7 @@ public class EmailService {
         String setFrom = "qwer4667@naver.com";
         String toMail = email;
         String title = "인증 이메일";
-        String content = "홈페이지를 방문해 주셔서 감사합니다." + "<br>" +
+        String content = "홈페이지를 방문해 주셔서 감사합니다." + "</br>" +
                 "인증번호는 " + authNumber + "입니다.";
 
         mailSend(setFrom, toMail, title, content);

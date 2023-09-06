@@ -5,16 +5,18 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import { FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import { SendEmailFN } from '../../NetworkUtils';
 
 function Signup() {
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
     const [passwordMatch, setPasswordMatch] = useState(false);
+    const [email, setEmail] = useState("");
 
     const [selectEmail, setSelectEmail] = useState("이메일 선택");
     const [customEmail, setCustomEmail] = useState("");
     const [showCustomInput, setShowCustomInput] = useState(false);
-    const [email, setEmail] = useState(false);
+    const [emailStatus, setEmailStatus] = useState(false);
 
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
@@ -26,13 +28,19 @@ function Signup() {
         setPasswordMatch(event.target.value === password);
     };
 
-    const handleEmailSelect = (email) => {
-        if (email === '직접입력') {
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value)
+    }
+
+    const handleEmailSelect = (emailStatus) => {
+        if (emailStatus === '직접입력') {
             setShowCustomInput(true);
-            setSelectEmail(email);
+            setSelectEmail(emailStatus);
         } else {
             setShowCustomInput(false);
-            setSelectEmail(email);
+            setCustomEmail(emailStatus);
+            console.log(emailStatus)
+            setSelectEmail(emailStatus);
         }
     };
 
@@ -41,17 +49,25 @@ function Signup() {
     };
 
     const EmailPush = () => {
-        setEmail(true);
+        const dto = {
+            email : email+"@"+customEmail
+        }
+        SendEmailFN("POST", "http://localhost:8000/emailAuth/email", dto)
+        .then((result) =>{
+            console.log(result)
+        })
+        
+        setEmailStatus(true);
     }
 
     const EmailAuth = () => {
-        setEmail(false);
+        setEmailStatus(false);
     }
 
     return (
         <div className='App'>
             <header className="App-header">
-                <img src='/assets/LandMaruBig.png' width={600} height={250}/>
+                <img src='/assets/LandMaruBig.png' width={600} height={250} alt=''/>
             <InputGroup style={{ width: "500px" }} className="mb-3">
                     <InputGroup.Text style={{width:"120px"}}>이름</InputGroup.Text>
                     <Form.Control id="username"  placeholder='*필수' />
@@ -76,7 +92,7 @@ function Signup() {
                 
                 <InputGroup style={{ width: "500px" }} className="mb-3">
                     <InputGroup.Text style={{width:"120px"}}>이메일</InputGroup.Text>
-                    <Form.Control id="email" placeholder='*필수'/>
+                    <Form.Control id="email" placeholder='*필수' value={email} onChange={handleEmailChange}/>
                     {showCustomInput && <Form.Control placeholder="직접 입력" value={customEmail} onChange={handleCustomEmailChange} />}
                     <DropdownButton variant="outline-secondary" title={selectEmail} id="input-group-dropdown-2" align="end">
                         <Dropdown.Item onClick={() => handleEmailSelect('naver.com')}>naver.com</Dropdown.Item>
@@ -88,7 +104,7 @@ function Signup() {
                     
                     
                 </InputGroup>
-                {email === false ? (
+                {emailStatus === false ? (
                     <Button variant="outline-secondary" onClick={()=> EmailPush()}>이메일 발송</Button>
                  ):<>
                  <InputGroup style={{ width: "500px" }} className="mb-3">

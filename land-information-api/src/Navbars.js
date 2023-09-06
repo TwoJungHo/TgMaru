@@ -10,7 +10,7 @@ function Navbars() {
     <Navbar bg="dark" data-bs-theme="dark">
       <Container>
         <Navbar.Brand href="/">
-          <img src='/assets/LandMaru.png' width={100} height={100}/>
+          <img src='/assets/LandMaru.png' width={100} height={100} alt=''/>
         </Navbar.Brand>
         <Nav className="me-auto" style={{fontSize:"25px"}}>
             <Nav.Link href="https://www.eais.go.kr/" target='_blank'>세움터</Nav.Link>
