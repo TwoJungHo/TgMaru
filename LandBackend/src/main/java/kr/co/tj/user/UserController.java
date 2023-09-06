@@ -17,7 +17,6 @@ public class UserController {
 	
 	@PostMapping("/signup")
 	public ResponseEntity<?> SignUp(@RequestBody UserDTO dto){
-		System.out.println(dto);
 		if(dto==null) {
 			return ResponseEntity.badRequest().body("dto가 null");
 		}
@@ -30,5 +29,19 @@ public class UserController {
 		System.out.println(entity.getUsername());
 		
 		return ResponseEntity.ok().body(entity);
+	}
+	
+	@PostMapping("/login")
+	public ResponseEntity<UserDTO> Login(@RequestBody UserDTO dto){
+		if(dto.getUserId() == null && dto.getPassword()==null) {
+			return ResponseEntity.badRequest().body(dto);
+		}
+		dto = userService.Login(dto);
+		
+		if(dto == null) {
+			return ResponseEntity.badRequest().body(dto);
+		}
+		
+		return ResponseEntity.ok().body(dto);
 	}
 }
