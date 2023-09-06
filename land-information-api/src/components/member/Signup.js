@@ -80,8 +80,8 @@ function Signup() {
     }
 
     function SignUpButton(){
-        if(password !== password2){
-            alert("패스워드가 일치하지 않습니다.")
+        if(password !== password2 || emailAuthFin === false){
+            alert("이메일 인증이 완료되지 않았거나, 패스워드가 일치하지않습니다.")
         } else{
             const dto = {
                 userId : userId.current.value.toString(),

@@ -4,6 +4,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { LoginFn } from '../../NetworkUtils';
 
 function Login() {
 
@@ -12,10 +13,11 @@ function Login() {
 
     function LoginPush(){
     const dto = {
-    userId : userId,
-    password : password
+    userId : userId.current.value.toString(),
+    password : password.current.value.toString()
     }
-    
+
+    LoginFn("POST", "http://localhost:8000/user/login", dto)
     }
 
     return (
@@ -30,10 +32,10 @@ function Login() {
                 </InputGroup>
                 <Row>
                     <Col>
-                        <Button variant="outline-light">로그인</Button>
+                        <Button variant="outline-light" onClick={LoginPush}>로그인</Button>
                     </Col>
                     <Col>
-                        <Button variant="outline-light" style={{width:'100px'}} href='/Signup' onClick={LoginPush}>회원가입</Button>
+                        <Button variant="outline-light" style={{width:'100px'}} href='/Signup' >회원가입</Button>
                     </Col>
                 </Row>
                 

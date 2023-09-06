@@ -76,3 +76,30 @@ export function SignUpFn(method, url, dto) {
       console.error(error);
     });
 }
+
+// 로그인
+export function LoginFn(method, url, dto) {
+  let options = {
+    method: method,
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(dto)
+  };
+  return fetch(url, options)
+    .then(
+      (response) => {
+      if (!response.ok) {
+        alert("아이디 또는 비밀번호가 일치하지 않습니다.")
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      localStorage.setItem("userId", data.userId);
+      window.location.href = "/"
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
