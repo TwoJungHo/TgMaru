@@ -23,36 +23,49 @@ public class PnuService {
 	private PnuRepository pnuRepository;
 
 	// Pnu찾기
-	public StringBuilder HttpPnuResponse(HttpResponse res) throws IOException {
-		// 외부 api에 요청보낼 준비작업
-		StringBuilder urlBuilder = new StringBuilder("http://map.vworld.kr/search.do");
-		urlBuilder.append("?apiKey=4FB88625-7D2E-36D5-9AE9-F6401DF87374");
-		urlBuilder.append("&q=" + URLEncoder.encode(res.getAddress(), "UTF-8"));
-		urlBuilder.append("&category=" + res.getCategory());
+    public StringBuilder HttpPnuResponse(HttpResponse res) throws IOException {
+        // 외부 api에 요청보낼 준비작업
+        StringBuilder urlBuilder = new StringBuilder("http://map.vworld.kr/search.do");
+        urlBuilder.append("?apiKey=4FB88625-7D2E-36D5-9AE9-F6401DF87374");
+        urlBuilder.append("&q=" + URLEncoder.encode(res.getAddress(), "UTF-8"));
+        urlBuilder.append("&category=" + res.getCategory());
 
-		URL url = new URL(urlBuilder.toString());
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-		conn.setRequestProperty("Content-type", "application/json");
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
 
-		BufferedReader rd;
-		
-		System.out.println(conn.getResponseCode());
-		
-		if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		} else {
-			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-		}
-		StringBuilder sb = new StringBuilder();
-		String line;
-		while ((line = rd.readLine()) != null) {
-			sb.append(line);
-		}
-		rd.close();
-		conn.disconnect();
-		return sb;
-	}
+        BufferedReader rd = null;
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else if (conn.getResponseCode() == 302) {
+            // 302코드가 오면 리다이렉션
+            String redirectLocation = conn.getHeaderField("Location");
+            if (redirectLocation != null) {
+                // 리다이렉션된 url에 대해 새로 연결시도
+                URL newUrl = new URL(redirectLocation);
+                conn = (HttpURLConnection) newUrl.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Content-type", "application/json");
+
+                if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                    rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                } else {
+                    rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                }
+            }
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+        return sb;
+    }
 
 	// 찾은 pnu값이 String형으로 되어있어서 dto로 변환작업
 	public PnuDTO parseApiResponse(String response) {
