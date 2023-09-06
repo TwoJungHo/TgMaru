@@ -57,29 +57,6 @@
 - V-World Open-Api
 - 공공데이터포털 Open-Api
 
-# 📗 Library to use
-
-
-> Back-end
-> 
-
-| Name | Version |
-| --- | --- |
-| jjwt | 0.9.1 |
-| thumbnailator | 0.4.19 |
-| mysql-connector-java | 8.0.33 |
-| netflix-eureka-client |  |
-| websocket | 5.3.1 |
-
-> Front-end (React)
-> 
-
-| Name | Version |
-| --- | --- |
-| stomp | 7.0.0 |
-| react-quill | 2.0.0 |
-| react-router-dom | 6.11.2 |
-
 
 # 📷 Screenshots
 
