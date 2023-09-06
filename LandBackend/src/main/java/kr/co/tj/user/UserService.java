@@ -23,7 +23,7 @@ public class UserService {
 
 	public UserEntity UserSignUp(UserDTO dto) {
 	    UserEntity entity = userRepository.findByEmail(dto.getEmail());
-
+	    
 	    if (entity == null) {
 	        entity = UserEntity.builder()
 	            .userId(dto.getUserId())

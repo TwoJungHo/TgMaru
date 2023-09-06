@@ -27,6 +27,7 @@ public class UserController {
 		if(entity == null) {
 			return ResponseEntity.badRequest().body("이미 있는 유저");
 		}
+		System.out.println(entity.getUsername());
 		
 		return ResponseEntity.ok().body(entity);
 	}

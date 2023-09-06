@@ -1,22 +1,29 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import { FiCheckCircle, FiXCircle } from 'react-icons/fi';
-import { SendEmailFN } from '../../NetworkUtils';
+import { SendEmailFN, SignUpFn } from '../../NetworkUtils';
 
 function Signup() {
-    const [password, setPassword] = useState("");
-    const [password2, setPassword2] = useState("");
-    const [passwordMatch, setPasswordMatch] = useState(false);
-    const [email, setEmail] = useState("");
+    const username = useRef(); //유저 이름
+    const userId = useRef();   // 유저 아이디
+    const [password, setPassword] = useState(""); // 유저 패스워드
+    const [password2, setPassword2] = useState(""); // 패스워드 일치 확인용
+    const [FinEmail, setFinEmail] = useState("");
+
+    const [passwordMatch, setPasswordMatch] = useState(false); // 패스워드 일치 확인 true false
+    const [email, setEmail] = useState(""); // 이메일 앞부분
+    const [emailAuthNumber, setEmailAuthNumber] = useState(""); // 발송된 이메일 인증번호
+    const emailAuthNumber1= useRef(); // 이메일 인증번호 확인
 
     const [selectEmail, setSelectEmail] = useState("이메일 선택");
     const [customEmail, setCustomEmail] = useState("");
     const [showCustomInput, setShowCustomInput] = useState(false);
     const [emailStatus, setEmailStatus] = useState(false);
+    const [emailAuthFin, setEmailAuthFin] = useState(false);
 
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
@@ -39,7 +46,6 @@ function Signup() {
         } else {
             setShowCustomInput(false);
             setCustomEmail(emailStatus);
-            console.log(emailStatus)
             setSelectEmail(emailStatus);
         }
     };
@@ -49,19 +55,42 @@ function Signup() {
     };
 
     const EmailPush = () => {
-        const dto = {
-            email : email+"@"+customEmail
+        if(password !== password2){
+        alert("패스워드가 일치하지 않습니다.")
+        }else{
+            const dto = {
+                email : email+"@"+customEmail
+            }
+            SendEmailFN("POST", "http://localhost:8000/emailAuth/email", dto)
+            .then((result) =>{
+                setEmailAuthNumber(result);
+            })
+            setEmailStatus(true);
         }
-        SendEmailFN("POST", "http://localhost:8000/emailAuth/email", dto)
-        .then((result) =>{
-            console.log(result)
-        })
-        
-        setEmailStatus(true);
     }
 
     const EmailAuth = () => {
-        setEmailStatus(false);
+        if(emailAuthNumber.toString() !== emailAuthNumber1.current.value.toString()){
+        alert("인증번호가 일치하지 않습니다!")
+        } else{
+        alert("인증이 완료 되었습니다.")
+        setEmailAuthFin(true);
+        setFinEmail(email+"@"+customEmail)
+        }
+    }
+
+    function SignUpButton(){
+        if(password !== password2){
+            alert("패스워드가 일치하지 않습니다.")
+        } else{
+            const dto = {
+                userId : userId.current.value.toString(),
+                username : username.current.value.toString(),
+                password : password,
+                email : FinEmail
+            }
+            SignUpFn("POST", `http://localhost:8000/user/signup`,dto)
+        }
     }
 
     return (
@@ -70,12 +99,12 @@ function Signup() {
                 <img src='/assets/LandMaruBig.png' width={600} height={250} alt=''/>
             <InputGroup style={{ width: "500px" }} className="mb-3">
                     <InputGroup.Text style={{width:"120px"}}>이름</InputGroup.Text>
-                    <Form.Control id="username"  placeholder='*필수' />
+                    <Form.Control id="username"  placeholder='*필수' ref={username}/>
                 </InputGroup>
 
                 <InputGroup style={{ width: "500px" }} className="mb-3">
                     <InputGroup.Text style={{width:"120px"}}>아이디</InputGroup.Text>
-                    <Form.Control id="id_name" placeholder='*필수' />
+                    <Form.Control id="id_name" placeholder='*필수' ref={userId}/>
                 </InputGroup>
 
                 <InputGroup style={{ width: "500px" }}  className="mb-3">
@@ -107,15 +136,18 @@ function Signup() {
                 {emailStatus === false ? (
                     <Button variant="outline-secondary" onClick={()=> EmailPush()}>이메일 발송</Button>
                  ):<>
-                 <InputGroup style={{ width: "500px" }} className="mb-3">
-                    <InputGroup.Text id="emailCode" style={{ width: "120px" }}>인증번호</InputGroup.Text>
-                    <Form.Control placeholder='메일로 발송된 인증번호를 적어주세요' />
-                 </InputGroup>
-                 <Button variant="outline-secondary" onClick={() => EmailAuth()}>이메일 인증</Button></>
+                 
+                 {emailAuthFin === false ? (
+                 <><InputGroup style={{ width: "500px" }} className="mb-3">
+                                <InputGroup.Text id="emailCode" style={{ width: "120px" }}>인증번호</InputGroup.Text>
+                                <Form.Control placeholder='메일로 발송된 인증번호를 적어주세요' ref={emailAuthNumber1} />
+                            </InputGroup><Button variant="outline-secondary" onClick={() => EmailAuth()}>이메일 인증</Button></>
+                 ):<Button variant="secondary" size="lg" disabled>인증완료</Button>}
+                 </>
                  }
                 <p style={{ fontSize: '12px' }}>E-mail 로 발송된 번호를 확인한 후 인증하셔야 회원가입이 완료됩니다.</p>
 
-                <Button variant="outline-success"style={{width:"500px"}} size="lg">가입 완료</Button>
+                <Button variant="outline-success"style={{width:"500px"}} size="lg" onClick={SignUpButton}>가입 완료</Button>
             </header>
         </div>
   )

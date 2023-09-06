@@ -30,6 +30,6 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://96junghos.mooo.com:12503/landback?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/landback?serverTimezone=Asia/Seoul
     username: tj705
     password: tj705

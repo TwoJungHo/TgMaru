@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
@@ -7,22 +7,33 @@ import Col from 'react-bootstrap/Col';
 
 function Login() {
 
+    const userId = useRef();
+    const password = useRef();
+
+    function LoginPush(){
+    const dto = {
+    userId : userId,
+    password : password
+    }
+    
+    }
+
     return (
         <div className='App'>
             <header className="App-header">
             <img src='/assets/LandMaruBig.png' width={600} height={250} alt=''/>
                 <InputGroup style={{ width: "500px" }} className="mb-3">
-                    <Form.Control placeholder='아이디' />
+                    <Form.Control placeholder='아이디' ref={userId}/>
                 </InputGroup>
                 <InputGroup style={{ width: "500px" }} className="mb-3">
-                    <Form.Control placeholder='비밀번호' />
+                    <Form.Control placeholder='비밀번호' ref={password}/>
                 </InputGroup>
                 <Row>
                     <Col>
                         <Button variant="outline-light">로그인</Button>
                     </Col>
                     <Col>
-                        <Button variant="outline-light" style={{width:'100px'}} href='/Signup'>회원가입</Button>
+                        <Button variant="outline-light" style={{width:'100px'}} href='/Signup' onClick={LoginPush}>회원가입</Button>
                     </Col>
                 </Row>
                 
