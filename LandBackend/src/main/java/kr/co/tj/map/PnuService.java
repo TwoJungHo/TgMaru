@@ -31,13 +31,14 @@ public class PnuService {
 		urlBuilder.append("&category=" + res.getCategory());
 
 		URL url = new URL(urlBuilder.toString());
-
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		conn.setRequestProperty("Content-type", "application/json");
 
 		BufferedReader rd;
-
+		
+		System.out.println(conn.getResponseCode());
+		
 		if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
 			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		} else {
