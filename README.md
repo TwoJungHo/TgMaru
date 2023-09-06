@@ -1,3 +1,5 @@
+[![LandBackend Java ci/cd with Maven](https://github.com/TwoJungHo/TgMaru/actions/workflows/java.yml/badge.svg)](https://github.com/TwoJungHo/TgMaru/actions/workflows/java.yml)
+
 # 목차
 
 
@@ -49,6 +51,7 @@
 ## DevOps
 
 - `Linux`
+- `Github-Actions`
 - `Mysql`
 - `Tomcat`
 - `Docker`
