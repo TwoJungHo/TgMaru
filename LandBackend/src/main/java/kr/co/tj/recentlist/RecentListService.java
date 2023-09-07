@@ -1,48 +1,50 @@
 package kr.co.tj.recentlist;
 
-import kr.co.tj.map.HttpResponse;
-import kr.co.tj.map.PnuDTO;
-import kr.co.tj.map.PnuService;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Date;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class RecentListService {
 
     private RecentListRepository recentListRepository;
-    private PnuService pnuService;
 
-    public RecentListDTO InputRecentList(RecentListDTO dto) throws IOException {
-
-        HttpResponse response = HttpResponse.builder()
-                .address(dto.getAddress())
-                .category("jibun")
-                .build();
-
-        StringBuilder sb = pnuService.HttpPnuResponse(response);
-        PnuDTO Pdto = pnuService.parseApiResponse(sb.toString());
-
-        List<Double> multiPolygon= pnuService.findByMultiPolygon(Pdto);
-
-        RecentListEntity entity = RecentListEntity.builder()
-                .address(dto.getAddress())
-                .userId(dto.getUserId())
-                .build();
-
-        entity = recentListRepository.save(entity);
-
-        dto = RecentListDTO.builder()
-                .address(entity.getAddress())
-                .userId(dto.getUserId())
-                .multipolygon(multiPolygon)
-                .id(entity.getId())
-                .build();
-
+    public RecentListDTO InputRecentList(RecentListDTO dto) {
+    	// DB에 해당 아이디가 있는 조회
+    	Optional<RecentListEntity> optional = recentListRepository.findById(dto.getUserId()+dto.getAddress());
+    	
+    	if( !optional.isEmpty()) {
+    		RecentListEntity entity = optional.get();
+    		dto = RecentListDTO.builder()
+    		.address(entity.getAddress())
+    		.id(entity.getId())
+    		.createat(entity.getCreateat())
+    		.userId(entity.getUserId())
+    		.build();
+    		
+    		return dto;
+    	}
+    	// 없다면 아래 코드 실행
+    	RecentListEntity NewEntity = RecentListEntity.builder()
+    			.id(dto.getUserId()+dto.getAddress())
+    			.userId(dto.getUserId())
+    			.address(dto.getAddress())
+    			.createat(new Date())
+    			.build();
+    	
+    	NewEntity = recentListRepository.save(NewEntity);
+    	
+    	dto = RecentListDTO.builder()
+    	.id(NewEntity.getId())
+    	.userId(NewEntity.getUserId())
+    	.address(NewEntity.getAddress())
+    	.createat(NewEntity.getCreateat())
+    	.build();
+    	
         return dto;
     }
 }

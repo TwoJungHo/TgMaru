@@ -1,11 +1,12 @@
 package kr.co.tj.recentlist;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -13,11 +14,12 @@ import java.util.List;
 @Builder
 public class RecentListDTO {
 	
-	private Long id;
+	private String id;
 	
 	private String userId;
 	
 	private String address;
+	
+	private Date createat;
 
-	private List<Double> multipolygon;
 }

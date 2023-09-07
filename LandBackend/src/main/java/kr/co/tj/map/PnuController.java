@@ -22,7 +22,6 @@ public class PnuController {
 	public ResponseEntity<?> FindPnu(@RequestBody HttpResponse res) throws IOException{
 		
         StringBuilder sb = pnuservice.HttpPnuResponse(res);
-        System.out.println(sb.toString());
         PnuDTO dto = pnuservice.parseApiResponse(sb.toString());
        
         List<Double> multiPolygon= pnuservice.findByMultiPolygon(dto);
