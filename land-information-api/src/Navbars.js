@@ -2,9 +2,24 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import 'bootstrap/dist/css/bootstrap.css'
+import { useEffect, useState } from 'react';
 
 function Navbars() {
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(()=> {
+    const userId = localStorage.getItem('userId');
+  if(userId){
+    setIsLoggedIn(true);
+  }
+  },[])
+
+  const handleLogout = () => {
+    localStorage.removeItem('userId');
+    setIsLoggedIn(false);
+    window.location.href = "/login";
+  };
 
   return (
     <Navbar bg="dark" data-bs-theme="dark">
@@ -19,12 +34,23 @@ function Navbars() {
             <Nav.Link href="http://www.iros.go.kr/PMainJ.jsp" target='_blank'>인터넷등기소</Nav.Link>
           </Nav>
         <Navbar.Toggle />
+
+        {isLoggedIn?(
+        <Navbar.Collapse className="justify-content-end">
+        <Navbar.Text>
+          <a href="/login" style={{fontSize:"25px"} }>로그아웃</a>
+        </Navbar.Text>
+        
+      </Navbar.Collapse>
+        ):
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
             <a href="/login" style={{fontSize:"25px"}}>로그인</a>
           </Navbar.Text>
           
         </Navbar.Collapse>
+        }
+        
       </Container>
     </Navbar>
   );

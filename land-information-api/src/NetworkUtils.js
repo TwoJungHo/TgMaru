@@ -9,7 +9,6 @@ export function FindByPolygon(method, url, dto) {
   };
   return fetch(url, options)
     .then((response) => {
-      console.log(response.status)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -98,6 +97,30 @@ export function LoginFn(method, url, dto) {
     .then((data) => {
       localStorage.setItem("userId", data.userId);
       window.location.href = "/"
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+// 메인페이지 최근 조회한 토지
+export function recentViewFn(method, url, dto) {
+  let options = {
+    method: method,
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(dto)
+  };
+  return fetch(url, options)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data;
     })
     .catch((error) => {
       console.error(error);

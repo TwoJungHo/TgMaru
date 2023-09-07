@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { FindByPolygon } from "../NetworkUtils";
+import { FindByPolygon, recentViewFn } from "../NetworkUtils";
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 
@@ -10,6 +10,9 @@ function Main() {
   const [netPolygon, setNetPolygon] = useState();
   const [juso,setJuso] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
+  const isLoggedIn = !!localStorage.getItem('userId');
+  const [recentView, setRecentView] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
 
   const previousPolygonRef = useRef(null); // useRef로 변수 생성
 
@@ -32,7 +35,20 @@ function Main() {
 
   }
 
+  useEffect(()=>{
+  recentViewFn("GET", `http://localhost:8000/recentlist/findRecentList/${localStorage.getItem("userId")}`)
+    .then((data) => {
+    setRecentView(data)
+    })
+    if(!userLocation){
+    return;
+    }
+  },[])
+
   useEffect(() => {
+
+    
+
     let latlng;
     const container = document.getElementById("kakaoMaps");
     const options = {
@@ -65,10 +81,18 @@ function Main() {
           FindByPolygon("POST", `http://localhost:8000/mapinfo/findpnu`, dto).then((data) => {
             setNetPolygon(data);
           });
+
+          // 로그인 상태인 경우에만 함수 실행
+          if(isLoggedIn){
+          recentViewFn("GET", `http://localhost:8000/recentlist/findRecentList/${localStorage.getItem("userId")}`)
+          .then((data)=>{
+            setRecentView(data)
+          });
+          }
         }
       });
     });
-  }, []);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (!map || !netPolygon) {
@@ -102,35 +126,46 @@ function Main() {
   return (
     <div>
       <header className="Main-header">
-      <div style={{ display: "flex", justifyContent: "center"}}>
-        {/* 왼쪽에 배치될 요소 */}
-        <div style={{ display: "inline-block", width: "500px", padding: "10px", backgroundColor: "black", height:"915px"}}>
-          <h2 style={{textAlign:"center"}}><Badge bg="dark">선택한 주소</Badge></h2>
-          <Button style={{margin:"auto", display:"block"}} variant="outline-success">{juso !== null ? juso : '주소'}</Button><br/>
-          <Button style={{margin:"auto", display:"block"}} variant="outline-primary">{juso !== null ? '자세히보기' : '지도 클릭시 활성화'}</Button>
-          <br/><br/><br/>
-          <h2 style={{color:"white", textAlign:"center"}}>최근 본 목록</h2><br/>
-          <p style={{fontSize:"20px", color:"white", textAlign:"center"}}>로그인시 활성화됩니다.</p>
-        </div>
-
-        <div style={{ position: "relative", width: "100%", height: "800px" }}>
-          <div id="kakaoMaps" style={{ width: "100%", height: "915px" }}></div>
-          {/* 버튼 컨테이너 */}
-          <div style={{ position: "absolute", top: "10px", zIndex: 100 }}>
-          <label className="checkbox-container" htmlFor="chkUseDistrict">
-        <input className="checkmark" type="checkbox" id="chkUseDistrict" onClick={setOverlayMapTypeId} />
-        <p style={{fontSize:"20px"}}>
-        <Badge bg="dark">{isChecked ? '지적편집도 비활성화' : '지적편집도 활성화'}</Badge>
-        </p>
-      </label>
+        <div style={{ display: "flex", justifyContent: "center"}}>
+          {/* 왼쪽에 배치될 요소 */}
+          <div style={{ display: "inline-block", width: "500px", padding: "10px", backgroundColor: "black", height:"915px"}}>
+            <h2 style={{textAlign:"center"}}><Badge bg="dark">선택한 주소</Badge></h2>
+            <Button style={{margin:"auto", display:"block"}} variant="outline-success">{juso !== null ? juso : '주소'}</Button><br/>
+            <Button style={{margin:"auto", display:"block"}} variant="outline-primary">{juso !== null ? '자세히보기' : '지도 클릭시 활성화'}</Button>
+            <br/><br/><br/>
+            <h2 style={{color:"white", textAlign:"center"}}>최근 본 목록</h2><br/>
+            {isLoggedIn ? (
+              // 로그인 상태일 때 표시될 내용
+              <p style={{fontSize:"20px", color:"white", textAlign:"center"}}>
+                {recentView.map((item, index) => (
+        <li key={index}>{item.address}</li>
+      ))}
+              </p>
+              
+            ) : (
+              // 로그인 상태가 아닐 때 표시될 내용
+              <p style={{fontSize:"20px", color:"white", textAlign:"center"}}>로그인시 활성화됩니다.</p>
+            )}
+          </div>
+  
+          <div style={{ position: "relative", width: "100%", height: "800px" }}>
+            <div id="kakaoMaps" style={{ width: "100%", height: "915px" }}></div>
+            {/* 버튼 컨테이너 */}
+            <div style={{ position: "absolute", top: "10px", zIndex: 100 }}>
+              <label className="checkbox-container" htmlFor="chkUseDistrict">
+                <input className="checkmark" type="checkbox" id="chkUseDistrict" onClick={setOverlayMapTypeId} />
+                <p style={{fontSize:"20px"}}>
+                  <Badge bg="dark">{isChecked ? '지적편집도 비활성화' : '지적편집도 활성화'}</Badge>
+                </p>
+              </label>
+            </div>
           </div>
         </div>
-      </div>
-      <p style={{textAlign:"center", backgroundColor:"black", color:"white"}}>본 지도의 표시되는 지적은 사실과 다를 수 있습니다</p>  
+        <p style={{textAlign:"center", backgroundColor:"black", color:"white"}}>본 지도의 표시되는 지적은 사실과 다를 수 있습니다</p>  
       </header>
     </div>
-    
   );
+  
 }
 
 export default Main;

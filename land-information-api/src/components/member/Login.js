@@ -8,6 +8,7 @@ import { LoginFn } from '../../NetworkUtils';
 
 function Login() {
 
+    localStorage.removeItem("userId")
     const userId = useRef();
     const password = useRef();
 
