@@ -60,6 +60,7 @@ function Main() {
           const dto = {
             category: "jibun",
             address: address,
+            userId : window.localStorage.getItem("userId")
           };
           FindByPolygon("POST", `http://localhost:8000/mapinfo/findpnu`, dto).then((data) => {
             setNetPolygon(data);

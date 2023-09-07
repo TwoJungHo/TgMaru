@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class HttpResponse {
-
+	
+	private String userId;
 	private String category;
 	private String address;
 	

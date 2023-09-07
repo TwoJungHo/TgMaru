@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import kr.co.tj.recentlist.RecentListController;
+import kr.co.tj.recentlist.RecentListDTO;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -21,9 +23,20 @@ import lombok.AllArgsConstructor;
 public class PnuService {
 
 	private PnuRepository pnuRepository;
+	private RecentListController recentListController;
+	private RecentListDTO recentListDTO;
 
 	// Pnu찾기
     public StringBuilder HttpPnuResponse(HttpResponse res) throws IOException {
+    	
+    	if(res.getUserId() != null) {
+			recentListDTO = RecentListDTO.builder()
+					.address(res.getAddress())
+					.userId(res.getUserId())
+					.build();
+			recentListController.RecentListInput(recentListDTO);
+		}
+    	
         // 외부 api에 요청보낼 준비작업
         StringBuilder urlBuilder = new StringBuilder("http://map.vworld.kr/search.do");
         urlBuilder.append("?apiKey=4FB88625-7D2E-36D5-9AE9-F6401DF87374");
