@@ -15,12 +15,6 @@ function Navbars() {
   }
   },[])
 
-  const handleLogout = () => {
-    localStorage.removeItem('userId');
-    setIsLoggedIn(false);
-    window.location.href = "/login";
-  };
-
   return (
     <Navbar bg="dark" data-bs-theme="dark">
       <Container>
@@ -37,9 +31,10 @@ function Navbars() {
 
         {isLoggedIn?(
         <Navbar.Collapse className="justify-content-end">
-        <Navbar.Text>
-          <a href="/login" style={{fontSize:"25px"} }>로그아웃</a>
-        </Navbar.Text>
+        <Nav>
+            <Nav.Link href="/login">로그아웃</Nav.Link>
+            <Nav.Link href={`/TGmaruProfile/${localStorage.getItem('userId')}`}>나의 정보</Nav.Link>
+          </Nav>
         
       </Navbar.Collapse>
         ):
