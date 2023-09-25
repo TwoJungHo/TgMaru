@@ -1,10 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+import { findByUserprofile } from '../../NetworkUtils';
+import { useParams } from 'react-router-dom';
 
 function MyProfile() {
+  const userId = useParams().userId;
+  const [userprofile, setUserprofile] = useState();
+
+  useEffect(()=>{
+    findByUserprofile("GET", `http://localhost:8000/user/myprofile/${userId}`)
+    .then((data)=>{
+      setUserprofile(data);
+    })
+  },[userId])
 
   return (
     <div className='App'>
@@ -19,29 +30,21 @@ function MyProfile() {
                 아이디
                 </Form.Label>
                 <Col sm="10">
-                <Form.Control style={{color:"white"}} plaintext readOnly defaultValue={localStorage.getItem("userId")} />
+                <Form.Control style={{color:"white"}} plaintext readOnly defaultValue={userId} />
                 </Col>
 
                 <Form.Label column sm="2">
                 Email
                 </Form.Label>
                 <Col sm="10">
-                <Form.Control style={{color:"white"}} plaintext readOnly defaultValue="이메일 들어올자리" />
+                <Form.Control style={{color:"white"}} plaintext readOnly defaultValue={userprofile ? userprofile.email : ""}/>
                 </Col>
 
                 <Form.Label column sm="2">
                 이름
                 </Form.Label>
                 <Col sm="10">
-                <Form.Control style={{color:"white"}} plaintext readOnly defaultValue="이름 들어올자리" />
-                </Col>
-
-               
-                <Form.Label column sm="2">
-                비밀번호
-                </Form.Label>
-                <Col sm="10">
-                <Form.Control style={{color:"white"}} plaintext readOnly defaultValue="수정 버튼 들어올자리" />
+                <Form.Control style={{color:"white"}} plaintext readOnly defaultValue={userprofile ? userprofile.username : ""} />
                 </Col>
             </Form.Group>
           </Form>

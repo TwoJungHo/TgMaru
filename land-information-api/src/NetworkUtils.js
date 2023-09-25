@@ -126,3 +126,26 @@ export function recentViewFn(method, url, dto) {
       console.error(error);
     });
 }
+
+// 메인페이지 최근 조회한 토지
+export function findByUserprofile(method, url) {
+  let options = {
+    method: method,
+    headers: {
+      "Content-Type": "application/json"
+    },
+  };
+  return fetch(url, options)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
