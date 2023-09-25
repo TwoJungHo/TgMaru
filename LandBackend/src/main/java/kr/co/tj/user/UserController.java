@@ -4,9 +4,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
@@ -45,6 +47,25 @@ public class UserController {
 			return ResponseEntity.badRequest().body(dto);
 		}
 		
+		return ResponseEntity.ok().body(dto);
+	}
+	
+	@GetMapping("/myprofile/{userId}")
+	public ResponseEntity<UserDTO> MyProfile(@PathVariable("userId") String userId){
+		
+		if(userId == null) {
+			return null;
+		}
+		
+		if(userId == "") {
+			return null;
+		}
+		
+		UserDTO dto = userService.findByUserprofile(userId);
+		
+		if(dto == null) {
+			return null;
+		}
 		return ResponseEntity.ok().body(dto);
 	}
 }

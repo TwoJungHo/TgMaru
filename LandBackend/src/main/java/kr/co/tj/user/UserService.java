@@ -67,5 +67,25 @@ public class UserService {
 		return dto;
 	}
 
+	public UserDTO findByUserprofile(String userId) {
+		
+		Optional<UserEntity> optional = userRepository.findById(userId);
+		
+		if(optional.isEmpty()) {
+			return null;
+		}
+		
+		UserEntity entity = optional.get();
+		
+		UserDTO dto = UserDTO.builder()
+		.userId(entity.getUserId())
+		.username(entity.getUsername())
+		.email(entity.getEmail())
+		.password(entity.getPassword())
+		.build();
+		
+		return dto;
+	}
+
 
 }
