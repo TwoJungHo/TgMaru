@@ -1,5 +1,8 @@
 package kr.co.tj.user;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
@@ -67,5 +70,28 @@ public class UserController {
 			return null;
 		}
 		return ResponseEntity.ok().body(dto);
+	}
+	
+	@GetMapping("/test")
+	public ResponseEntity<List<String>> test(){
+		
+		List<String> list = new ArrayList<>();
+		
+		list.add("11111");
+		list.add("22222");
+		list.add("33333");
+		list.add("4444");
+		list.add("55555");
+		list.add("666");
+		list.add("77");
+		list.add("88");
+		list.add("99");
+		list.add("aa");
+		list.add("ss");
+		list.add("dd");
+		list.add("ff");
+		list.add("gg");
+		
+		return ResponseEntity.ok().body(list);
 	}
 }

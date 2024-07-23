@@ -36,10 +36,9 @@ public class PnuService {
 					.build();
 			recentListController.RecentListInput(recentListDTO);
 		}
-    	
         // 외부 api에 요청보낼 준비작업
         StringBuilder urlBuilder = new StringBuilder("http://map.vworld.kr/search.do");
-        urlBuilder.append("?apiKey=4FB88625-7D2E-36D5-9AE9-F6401DF87374");
+        urlBuilder.append("?apiKey=7B7793FE-97E0-3C1A-AD7A-5824A3CB8949");
         urlBuilder.append("&q=" + URLEncoder.encode(res.getAddress(), "UTF-8"));
         urlBuilder.append("&category=" + res.getCategory());
 
@@ -83,7 +82,7 @@ public class PnuService {
 	// 찾은 pnu값이 String형으로 되어있어서 dto로 변환작업
 	public PnuDTO parseApiResponse(String response) {
 	    PnuDTO dto = new PnuDTO();
-
+	    System.err.println(response);
 	    try {
 	        ObjectMapper objectMapper = new ObjectMapper();
 	        JsonNode rootNode = objectMapper.readTree(response);
@@ -116,7 +115,7 @@ public class PnuService {
 	// pnu값으로 multipolygon찾기
 	public List<Double> findByMultiPolygon(PnuDTO dto) throws IOException {
 		StringBuilder urlBuilder = new StringBuilder("http://api.vworld.kr/req/data");
-		urlBuilder.append("?key=84DF8EE3-31FB-3E67-B49C-4A8870DE3D48");
+		urlBuilder.append("?key=7B7793FE-97E0-3C1A-AD7A-5824A3CB8949");
 		urlBuilder.append("&service=data");
 		urlBuilder.append("&request=GetFeature");
 		urlBuilder.append("&data=LP_PA_CBND_BUBUN");
