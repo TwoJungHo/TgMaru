@@ -3,6 +3,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import 'bootstrap/dist/css/bootstrap.css'
 import { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 
 function Navbars() {
 
@@ -13,7 +14,12 @@ function Navbars() {
   if(userId){
     setIsLoggedIn(true);
   }
-  },[])
+  },[]);
+
+  function clickEvent(e){
+      window.location.href='/freeBoard'
+    
+  }
 
   return (
     <Navbar bg="dark" data-bs-theme="dark">
@@ -26,6 +32,7 @@ function Navbars() {
             <Nav.Link href="http://www.eum.go.kr/web/am/amMain.jsp" target='_blank'>토지이음</Nav.Link>
             <Nav.Link href="http://www.gov.kr" target='_blank'>정부24</Nav.Link>
             <Nav.Link href="http://www.iros.go.kr/PMainJ.jsp" target='_blank'>인터넷등기소</Nav.Link>
+            <Nav.Link href="#" target='_blank' onClick={clickEvent}>자유게시판</Nav.Link>
           </Nav>
         <Navbar.Toggle />
 
@@ -50,5 +57,4 @@ function Navbars() {
     </Navbar>
   );
 }
-
 export default Navbars;

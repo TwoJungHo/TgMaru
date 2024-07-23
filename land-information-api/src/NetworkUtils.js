@@ -127,14 +127,20 @@ export function recentViewFn(method, url, dto) {
     });
 }
 
-// 메인페이지 최근 조회한 토지
-export function findByUserprofile(method, url) {
+// common Function
+export function _Fetch(method, url, dto) {
+  url = "http://localhost:8000/" + url
   let options = {
     method: method,
     headers: {
       "Content-Type": "application/json"
     },
   };
+
+  if (method !== 'GET') {
+    options.body = JSON.stringify(dto);  // GET이 아닌 경우에만 body 추가
+  };
+
   return fetch(url, options)
     .then((response) => {
       if (!response.ok) {

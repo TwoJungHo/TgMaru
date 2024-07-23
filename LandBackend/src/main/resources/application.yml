@@ -11,8 +11,8 @@ spring:
   mail:
     host: smtp.naver.com
     port: 587
-    username: qwer4667@naver.com
-    password: hh890807^^
+    username: ${db.username}
+    password: ${db.password}
     properties:
       mail:
         smtp:
@@ -31,5 +31,5 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/landback?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: tj705
-    password: tj705
+    username: root
+    password: root

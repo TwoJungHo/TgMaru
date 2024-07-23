@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { findByUserprofile } from '../../NetworkUtils';
+import { _Fetch } from '../../NetworkUtils';
 import { useParams } from 'react-router-dom';
 
 function MyProfile() {
@@ -11,9 +11,17 @@ function MyProfile() {
   const [userprofile, setUserprofile] = useState();
 
   useEffect(()=>{
-    findByUserprofile("GET", `http://localhost:8000/user/myprofile/${userId}`)
+    let param = {
+      userId : userId
+    };
+
+    _Fetch("GET", `user/myprofile/${userId}`)
     .then((data)=>{
-      setUserprofile(data);
+      if(data === undefined || data === null){
+        alert("사용자의 정보를 불러오는데 실패했습니다.")
+      }else{
+        setUserprofile(data);
+      }
     })
   },[userId])
 

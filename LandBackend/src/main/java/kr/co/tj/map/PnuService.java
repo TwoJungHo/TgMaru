@@ -82,7 +82,6 @@ public class PnuService {
 	// 찾은 pnu값이 String형으로 되어있어서 dto로 변환작업
 	public PnuDTO parseApiResponse(String response) {
 	    PnuDTO dto = new PnuDTO();
-	    System.err.println(response);
 	    try {
 	        ObjectMapper objectMapper = new ObjectMapper();
 	        JsonNode rootNode = objectMapper.readTree(response);
