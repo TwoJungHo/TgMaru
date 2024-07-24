@@ -138,7 +138,7 @@ export function _Fetch(method, url, dto) {
   };
 
   if (method !== 'GET') {
-    options.body = JSON.stringify(dto);  // GET이 아닌 경우에만 body 추가
+    options.body = JSON.stringify(dto)  // GET이 아닌 경우에만 body 추가
   };
 
   return fetch(url, options)

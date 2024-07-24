@@ -15,14 +15,18 @@ function FreeBoardInsert() { // 컴포넌트 이름을 대문자로 변경
         
     }else{
         const param = {
-            title : title,
-            content : content,
+            "title" : title,
+            "content" : content,
+            "userId" : localStorage.getItem("userId")
         };
-
-        console.log(param)
         
-        _Fetch("GET", `board/insertBoard/`, param).then(data=>{
-
+        _Fetch("POST", `freeboard/insert`, param).then(data=>{
+          if(data){
+            alert("성공적으로 등록되었습니다.")
+            window.location.href = "/freeBoard"
+          }else{
+            alert("서버와의 통신에 실패했습니다. \n 잠시후 다시 시도해주세요")
+          }
         });
     }
    

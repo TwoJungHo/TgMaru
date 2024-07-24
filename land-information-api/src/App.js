@@ -8,6 +8,7 @@ import Signup from "./components/member/Signup";
 import MyProfile from "./components/member/MyProfile";
 import FreeBoard from "./components/board/freeBoard";
 import freeBoardInsert from "./components/board/freeBoardInsert";
+import freeBoardDetail from "./components/board/freeBoardDetail";
 function App() {
   return (
     <div>
@@ -20,6 +21,7 @@ function App() {
           <Route path="/TGmaruProfile/:userId" Component={MyProfile}/>
           <Route path="/freeboard" Component={FreeBoard}/>
           <Route path="/freeBoard/insertBoard" Component={freeBoardInsert}/>
+          <Route path="/freeBoard/detail/:id/:author" Component={freeBoardDetail}/>
         </Routes>
         
       </BrowserRouter>

@@ -11,10 +11,6 @@ function MyProfile() {
   const [userprofile, setUserprofile] = useState();
 
   useEffect(()=>{
-    let param = {
-      userId : userId
-    };
-
     _Fetch("GET", `user/myprofile/${userId}`)
     .then((data)=>{
       if(data === undefined || data === null){

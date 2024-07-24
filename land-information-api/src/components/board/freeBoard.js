@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -9,21 +9,22 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Pagination from 'react-bootstrap/Pagination';
 import 'bootstrap/dist/css/bootstrap.css';
 import CustomAlert from '../Common';
+import { _Fetch } from '../../NetworkUtils';
 
 function FreeBoard() {
   const userId = localStorage.getItem('userId')
+  const [posts, setPosts] = useState([]);
+  
 
-  // 게시글 목록 예시 데이터
-  const posts = [
-    { id: 1, title: "첫 번째 게시글", content: "이것은 첫 번째 게시글입니다.", author: "User1", date: "2024-07-23" },
-    { id: 2, title: "두 번째 게시글", content: "이것은 두 번째 게시글입니다.", author: "User2", date: "2024-07-22" },
-    { id: 3, title: "세 번째 게시글", content: "이것은 세 번째 게시글입니다.", author: "User3", date: "2024-07-21" },
-    { id: 4, title: "네 번째 게시글", content: "이것은 네 번째 게시글입니다.", author: "User4", date: "2024-07-20" },
-    { id: 5, title: "다섯 번째 게시글", content: "이것은 다섯 번째 게시글입니다.", author: "User5", date: "2024-07-19" },
-    { id: 6, title: "여섯 번째 게시글", content: "이것은 여섯 번째 게시글입니다.", author: "User6", date: "2024-07-18" },
-    { id: 7, title: "일곱 번째 게시글", content: "이것은 일곱 번째 게시글입니다.", author: "User7", date: "2024-07-17" },
-    { id: 8, title: "여덟 번째 게시글", content: "이것은 여덟 번째 게시글입니다.", author: "User8", date: "2024-07-16" },
-  ];
+  useEffect(()=> {
+    
+    _Fetch("GET","freeboard/select").then(data=>{
+     
+      setPosts(data)
+    })
+  
+  },[]);
+  
 
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 5;
@@ -42,7 +43,11 @@ function FreeBoard() {
     }else{
         alert("로그인후에 이용해주시기 바랍니다.")
     }
-  }
+  };
+
+  const fn_detail = (id, author) =>{
+    window.location.href=`/freeBoard/detail/${id}/${author}`
+  };
 
   return (
     <Container className="mt-5">
@@ -64,7 +69,8 @@ function FreeBoard() {
                 <Card>
                   <Card.Body>
                     <Card.Title>{post.title}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">작성자: {post.author} | 날짜: {post.date}</Card.Subtitle>
+                    <Card.Subtitle className="mb-2 text-muted">작성자: {post.author} | 등록일자: {post.date}</Card.Subtitle>
+                    <a className="btn btn-primary" onClick={()=>fn_detail(post.id, post.author)}>자세히보기</a>
                   </Card.Body>
                 </Card>
               </ListGroup.Item>
