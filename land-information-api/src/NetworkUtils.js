@@ -155,3 +155,27 @@ export function _Fetch(method, url, dto) {
       console.error(error);
     });
 }
+
+
+// 첨부파일 공통
+export function FileUploadFetch(method, url, formData) {
+  url = "http://localhost:8000/" + url
+
+  let options = {
+    method: method,
+    body: formData
+  };
+  return fetch(url, options)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}

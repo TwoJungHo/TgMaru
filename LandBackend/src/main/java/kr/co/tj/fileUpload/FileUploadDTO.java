@@ -1,4 +1,4 @@
-package kr.co.tj.freeBoard;
+package kr.co.tj.fileUpload;
 
 import java.util.Date;
 
@@ -11,17 +11,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FreeBoardDTO {
+public class FileUploadDTO {
+
 	
-	private String userId;
+	private Long id;
+
+    private String attflId;
+    
+    private String fileName;
 	
-	private String title;
+	private String filePath;
 	
-	private String content;
+	private int seq;
 	
-	private String attflId;
+	private String useYn;
 	
 	private Date createDate;
-	
-	private Date modifyDate;
 }

@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react'; // React와 useEffect를 임
 import { Container, Form, Button, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import { _Fetch } from '../../NetworkUtils';
+import FileUpload from '../FileUpload';
 
 function FreeBoardInsert() { // 컴포넌트 이름을 대문자로 변경
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [attflId, setAttflId] = useState(null);
 
   const handleSubmit = (e) => {
     
@@ -17,9 +19,11 @@ function FreeBoardInsert() { // 컴포넌트 이름을 대문자로 변경
         const param = {
             "title" : title,
             "content" : content,
-            "userId" : localStorage.getItem("userId")
+            "userId" : localStorage.getItem("userId"),
+            "attflId" : attflId
         };
         
+        console.log(param)
         _Fetch("POST", `freeboard/insert`, param).then(data=>{
           if(data){
             alert("성공적으로 등록되었습니다.")
@@ -31,6 +35,10 @@ function FreeBoardInsert() { // 컴포넌트 이름을 대문자로 변경
     }
    
 
+  };
+
+  const handleUploadSuccess = (data) => {
+    setAttflId(data); // 파일 업로드 성공 시 첨부파일ID 저장
   };
 
   return (
@@ -45,11 +53,14 @@ function FreeBoardInsert() { // 컴포넌트 이름을 대문자로 변경
           <Form.Label>제목</Form.Label>
           <Form.Control type="text" placeholder="*게시글 제목을 입력하세요" value={title} onChange={(e) => setTitle(e.target.value)} required/>
         </Form.Group>
+        <FileUpload onUploadSuccess={handleUploadSuccess}/>
+
+
         <Form.Group controlId="formContent" className="mb-3">
           <Form.Label>내용</Form.Label>
           <Form.Control as="textarea" rows={15} placeholder="*게시글 내용을 입력하세요" value={content} onChange={(e) => setContent(e.target.value)} required/>
         </Form.Group>
-      
+        
     </Container>
     
   );

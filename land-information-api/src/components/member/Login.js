@@ -29,7 +29,7 @@ function Login() {
                     <Form.Control placeholder='아이디' ref={userId}/>
                 </InputGroup>
                 <InputGroup style={{ width: "500px" }} className="mb-3">
-                    <Form.Control placeholder='비밀번호' ref={password}/>
+                    <Form.Control placeholder='비밀번호' ref={password} type='password'/>
                 </InputGroup>
                 <Row>
                     <Col>

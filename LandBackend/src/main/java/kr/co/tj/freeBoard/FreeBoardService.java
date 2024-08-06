@@ -25,6 +25,7 @@ public class FreeBoardService {
 		.userId((String) map.get("userId"))
 		.title((String) map.get("title"))
 		.content((String) map.get("content"))
+		.attflId((String)map.get("attflId"))
 		.createDate(date)
 		.build();
 		
