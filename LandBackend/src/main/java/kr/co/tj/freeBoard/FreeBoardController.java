@@ -69,7 +69,7 @@ public class FreeBoardController {
 		
 		result = freeBoardService.updateBoard(map);
 		
-		return ResponseEntity.ok().body(true);
+		return ResponseEntity.ok().body(result);
 	}
 	
 }

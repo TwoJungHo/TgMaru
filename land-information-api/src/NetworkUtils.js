@@ -200,8 +200,7 @@ export function _DownLoadFile(method, url, dto) {
       }
 
       // `Content-Disposition` 헤더에서 파일 이름 추출
-      const contentDisposition = response.headers.get('Content-Disposition');
-      console.log(contentDisposition)
+      const contentDisposition = response.headers.get('Content-Disposition');      
 
       let fileName = 'downloaded_file';  // 기본 파일 이름
 

@@ -80,6 +80,7 @@ public class FileUploadController {
 	         BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream())) {
 
 	        response.setContentType("application/octet-stream");
+	        
 	        // 파일 이름과 확장자를 포함한 Content-Disposition 헤더 설정
 	        response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\"");
 	        response.setContentLengthLong(file.length());

@@ -2,6 +2,7 @@ package kr.co.tj.user;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -71,26 +72,18 @@ public class UserController {
 		return ResponseEntity.ok().body(dto);
 	}
 	
-	@GetMapping("/test")
-	public ResponseEntity<List<String>> test(){
+	@PostMapping("/updateUser")
+	public ResponseEntity<?> UpdateUser(@RequestBody Map<String, String> map){
 		
-		List<String> list = new ArrayList<>();
+		boolean result = userService.UpdateUser(map);
 		
-		list.add("11111");
-		list.add("22222");
-		list.add("33333");
-		list.add("4444");
-		list.add("55555");
-		list.add("666");
-		list.add("77");
-		list.add("88");
-		list.add("99");
-		list.add("aa");
-		list.add("ss");
-		list.add("dd");
-		list.add("ff");
-		list.add("gg");
+//		UserEntity entity = userService.UserSignUp(dto);
 		
-		return ResponseEntity.ok().body(list);
+//		if(entity == null) {
+//			return ResponseEntity.badRequest().body("이미 있는 유저");
+//		}
+		
+		return ResponseEntity.ok().body(result);
 	}
+	
 }

@@ -8,12 +8,15 @@ function FreeBoardUpdate() {
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [attflId, setAttflId] = useState('');
     const id = useParams().id
 
 
     useEffect(()=> {
 
       _Fetch("GET", `freeboard/getDetail/${id}`).then(data=>{
+        console.log(data)
+        setAttflId(data.attflId)
         setTitle(data.title);
         setContent(data.content)
       });
@@ -32,6 +35,7 @@ function FreeBoardUpdate() {
             title : title,
             content : content,
             userId : localStorage.getItem("userId"),
+            attflId : attflId
         }
 
         console.log(param)

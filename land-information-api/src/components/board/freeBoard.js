@@ -20,7 +20,6 @@ function FreeBoard() {
   useEffect(()=> {
     
     _Fetch("GET","freeboard/select").then(data=>{
-     
       setPosts(data)
     })
   
@@ -78,7 +77,7 @@ function FreeBoard() {
                   <Card.Body>
                     <Card.Title>{post.title}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">작성자: {post.author} | 등록일자: {post.date}</Card.Subtitle>
-                    <a className="btn btn-primary" onClick={()=>fn_detail(post.id, post.author)}>자세히보기</a>
+                    <a className="btn btn-primary" onClick={()=>fn_detail(post.id, post.userId)}>자세히보기</a>
                   </Card.Body>
                 </Card>
               </ListGroup.Item>

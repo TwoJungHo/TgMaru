@@ -1,6 +1,7 @@
 package kr.co.tj.user;
 
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -85,6 +86,32 @@ public class UserService {
 		.build();
 		
 		return dto;
+	}
+
+	public boolean UpdateUser(Map<String, String> map) {
+		
+		String email = map.get("email");
+		UserEntity entity = userRepository.findByEmail(email);
+		
+		String originPassword = entity.getPassword();
+		String originInputPassword = map.get("password");
+		
+		boolean isMatched = passwordEncoder.matches(originInputPassword, originPassword);
+		
+		if(isMatched) {
+			
+			UserEntity changeEntity = UserEntity.builder()
+			.userId(map.get("userId"))
+			.username(map.get("username"))
+			.password(passwordEncoder.encode(map.get("changePassword")))
+			.email(map.get("email"))
+			.build();
+			
+			userRepository.save(changeEntity);
+		}else {
+			return false;
+		}
+		return true;
 	}
 
 

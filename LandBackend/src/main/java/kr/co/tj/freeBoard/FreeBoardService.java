@@ -82,6 +82,7 @@ public class FreeBoardService {
 				.content((String) map.get("content"))
 				.createDate(createEntity.getCreateDate())
 				.modifyDate(date)
+				.attflId((String) map.get("attflId"))
 				.build();
 				
 				freeBoardRepository.save(entity);
