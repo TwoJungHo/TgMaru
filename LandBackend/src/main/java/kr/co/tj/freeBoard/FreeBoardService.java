@@ -59,6 +59,7 @@ public class FreeBoardService {
 		map.put("content", entity.getContent());
 		map.put("title", entity.getTitle());
 		map.put("userId", entity.getUserId());
+		map.put("attflId", entity.getAttflId());
 		map.put("createDate", dateFormat);
 		return map;
 	}
@@ -86,6 +87,17 @@ public class FreeBoardService {
 				freeBoardRepository.save(entity);
 		return true;
 		
+	}
+
+	public List<Map<String, Object>> findBoardList(String searchType, String searchValue) {
+		
+		if ("0".equals(searchType)) {
+            searchValue = "%" + searchValue + "%";
+        }
+		
+		List<Map<String, Object>> result = freeBoardRepository.findFreeBoardType(searchType, searchValue);
+		
+		return result;
 	}
 	
 	

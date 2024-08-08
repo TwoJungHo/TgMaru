@@ -8,13 +8,14 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Pagination from 'react-bootstrap/Pagination';
 import 'bootstrap/dist/css/bootstrap.css';
-import CustomAlert from '../Common';
 import { _Fetch } from '../../NetworkUtils';
 
 function FreeBoard() {
   const userId = localStorage.getItem('userId')
   const [posts, setPosts] = useState([]);
-  
+  const [searchType, setSearchType] = useState(0);
+  const [searchValue, setSearchValue] = useState(null);
+
 
   useEffect(()=> {
     
@@ -44,6 +45,13 @@ function FreeBoard() {
         alert("로그인후에 이용해주시기 바랍니다.")
     }
   };
+
+  const fn_search = ()=> {
+    _Fetch("GET", `freeboard/searchBoard/${searchType}/${searchValue}`)
+    .then((data)=>{
+      setPosts(data)
+    })
+  }
 
   const fn_detail = (id, author) =>{
     window.location.href=`/freeBoard/detail/${id}/${author}`
@@ -101,6 +109,16 @@ function FreeBoard() {
           </Pagination>
         </Col>
       </Row>
+      <div style={{textAlign:'center'}}>
+        <select name='searchValue' onChange={(event)=> setSearchType(event.target.value)}>
+          <option value={0}>제목 + 내용</option>
+          <option value={1}>작성자</option>
+        </select>
+        <input type='text' onChange={(event) => setSearchValue(event.target.value)}/>
+        <button onClick={fn_search}>조회</button>
+        </div>
+        
+      
     </Container>
   );
 }

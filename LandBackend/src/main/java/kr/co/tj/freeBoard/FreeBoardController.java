@@ -37,7 +37,15 @@ public class FreeBoardController {
 	@GetMapping("/select")
 	public ResponseEntity<?> getMethodName() {
 		
-		List<Map<String, Object>> result= freeBoardService.selectBoard();
+		List<Map<String, Object>> result = freeBoardService.selectBoard();
+		
+		return ResponseEntity.ok().body(result);
+	}
+	
+	@GetMapping("/searchBoard/{searchType}/{searchValue}")
+	public ResponseEntity<?> getsearchBoard(@PathVariable("searchType") String searchType, @PathVariable("searchValue") String searchValue) {
+		
+		List<Map<String, Object>> result = freeBoardService.findBoardList(searchType, searchValue);
 		
 		return ResponseEntity.ok().body(result);
 	}
@@ -49,6 +57,7 @@ public class FreeBoardController {
 		
 		return ResponseEntity.ok().body(result);
 	}
+	
 	
 	@PostMapping("/update")
 	public ResponseEntity<?> updateBoard(@RequestBody Map<String, Object> map) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'; // React와 useEffect를 임포트합니다.
-import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import { _Fetch } from '../../NetworkUtils';
 import FileUpload from '../FileUpload';
@@ -23,7 +23,6 @@ function FreeBoardInsert() { // 컴포넌트 이름을 대문자로 변경
             "attflId" : attflId
         };
         
-        console.log(param)
         _Fetch("POST", `freeboard/insert`, param).then(data=>{
           if(data){
             alert("성공적으로 등록되었습니다.")

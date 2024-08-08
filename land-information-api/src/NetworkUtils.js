@@ -179,3 +179,57 @@ export function FileUploadFetch(method, url, formData) {
       console.error(error);
     });
 }
+
+export function _DownLoadFile(method, url, dto) {
+  url = "http://localhost:8000/" + url;
+  let options = {
+    method: method,
+    headers: {
+      "Content-Type": "application/json"
+    },
+  };
+
+  if (method !== 'GET') {
+    options.body = JSON.stringify(dto);  // GET이 아닌 경우에만 body 추가
+  }
+
+  return fetch(url, options)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // `Content-Disposition` 헤더에서 파일 이름 추출
+      const contentDisposition = response.headers.get('Content-Disposition');
+      console.log(contentDisposition)
+
+      let fileName = 'downloaded_file';  // 기본 파일 이름
+
+      if (contentDisposition) {
+        const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+        if (fileNameMatch && fileNameMatch[1]) {
+          fileName = decodeURIComponent(fileNameMatch[1]); // URL 디코딩
+        }
+      }
+
+      // 파일을 Blob으로 읽기
+      return response.blob().then((blob) => ({
+        blob,
+        fileName
+      }));
+    })
+    .then(({ blob, fileName }) => {
+      // 파일 다운로드 트리거
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName; // 디코딩된 파일 이름 사용
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}

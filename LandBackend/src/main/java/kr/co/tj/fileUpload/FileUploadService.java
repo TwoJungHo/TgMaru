@@ -1,6 +1,7 @@
 package kr.co.tj.fileUpload;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -8,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -73,4 +75,33 @@ public class FileUploadService {
 		return attflId;
 
 	}
+
+	public List<Map<String, Object>> findAttflId(String attflId) {
+		
+		List<Map<String, Object>> result = fileUploadRepository.findByFileList(attflId);
+		
+		
+		return result;
+	}
+
+	public boolean fileDownload(Map<String, String> map) {
+		
+		boolean rs = false;
+		
+		
+		
+		
+		
+		return rs;
+	}
+	
+	public File getFileToDownload(Map<String, String> map) {
+        String filePath = map.get("filePath");
+        String fileName = map.get("fileName");
+        
+        int lastSeparatorIndex = filePath.lastIndexOf('\\');
+		String directoryPath = filePath.substring(0, lastSeparatorIndex);
+		
+        return new File(directoryPath, fileName);
+    }
 }

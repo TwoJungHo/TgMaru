@@ -9,6 +9,7 @@ import MyProfile from "./components/member/MyProfile";
 import FreeBoard from "./components/board/freeBoard";
 import freeBoardInsert from "./components/board/freeBoardInsert";
 import freeBoardDetail from "./components/board/freeBoardDetail";
+import freeBoardUpdate from "./components/board/freeBoardUpdate";
 function App() {
   return (
     <div>
@@ -22,6 +23,7 @@ function App() {
           <Route path="/freeboard" Component={FreeBoard}/>
           <Route path="/freeBoard/insertBoard" Component={freeBoardInsert}/>
           <Route path="/freeBoard/detail/:id/:author" Component={freeBoardDetail}/>
+          <Route path="/freeBoard/update/:id" Component={freeBoardUpdate}/>
         </Routes>
         
       </BrowserRouter>
